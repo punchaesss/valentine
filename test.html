@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>💌 ส่งความรัก</title>
+    <!-- <div class="bg"><video autoplay muted loop playsinline src="bg.mp4"></video></div> -->
+<style>
+body {
+    background: linear-gradient(135deg, #ffd1dc, #fff);
+    font-family: 'Segoe UI', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    width: 360px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.2);
+    text-align: center;
+}
+h2 { color: #ff4d88; }
+textarea, input, button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+button {
+    background: #ff4d88;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.status { margin-top: 10px; color: #ff4d88; }
+
+.bg video{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+                overflow: hidden;
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>💖 Valentine</h2>
+    <textarea id="text" placeholder="พิมพ์ข้อความ (ไม่ใส่ก็ได้)"></textarea>
+    <input type="file" id="image" accept="image/*">
+    <button id="sendBtn">ส่ง 💕</button>
+    <div class="status" id="status"></div>
+</div>
+
+<script type="module">
+/* 🔥 Firebase (v12 – module) */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+/* 🔑 Firebase config (ของคุณ) */
+const firebaseConfig = {
+  apiKey: "AIzaSyAdnNofaKHq0DymEwB4tVhoOsjsmNiaW0g",
+  authDomain: "love-c3e16.firebaseapp.com",
+  projectId: "love-c3e16",
+  storageBucket: "love-c3e16.firebasestorage.app",
+  messagingSenderId: "1006520162203",
+  appId: "1:1006520162203:web:a6f0a69b4c8238bd76333e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* 🖼 freeimage.host */
+const IMGBB_API_KEY = "d7ff3b59225fef396757e8e7fb8b1434";
+
+async function uploadImage(file) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+        {
+            method: "POST",
+            body: formData
+        }
+    );
+
+    const data = await res.json();
+
+    if (!data.success) {
+        console.error(data);
+        throw new Error("Upload failed");
+    }
+
+    return data.data.url; // ⭐ URL รูปที่ใช้แสดงได้ทันที
+}
+
+
+document.getElementById("sendBtn").onclick = async () => {
+    const text = document.getElementById("text").value.trim();
+    const file = document.getElementById("image").files[0];
+    const status = document.getElementById("status");
+
+    if (!text && !file) {
+        alert("กรุณาพิมพ์ข้อความหรือเลือกรูปอย่างใดอย่างหนึ่ง 💕");
+        return;
+    }
+
+    status.textContent = "กำลังส่ง...";
+    let imageUrl = "";
+
+    try {
+        if (file) imageUrl = await uploadImage(file);
+
+        await addDoc(collection(db, "messages"), {
+            text,
+            imageUrl,
+            createdAt: serverTimestamp()
+        });
+
+        status.textContent = "ส่งสำเร็จแล้ว 💖";
+        document.getElementById("text").value = "";
+        document.getElementById("image").value = "";
+
+    } catch (err) {
+        console.error(err);
+        alert("ส่งไม่สำเร็จ 😢");
+        status.textContent = "";
+    }
+};
+</script>
+
+</body>
+</html>
