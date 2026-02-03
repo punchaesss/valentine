@@ -14,8 +14,8 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     /* font-family: 'Segoe UI', sans-serif; */
-      font-family: 'Great Vibes', cursive;
-
+    font-family: 'Great Vibes', cursive;
+    font-size: 25px;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -53,19 +53,22 @@ button {
 
 .status { margin-top: 10px; color: #9b0e3d; } */
 .card {
-  background: transparent;     /* ไม่มีสี */
-  width: 320px;
+  background: transparent; 
+  /* width: 500px;
+  height: 300px; */
+  justify-content: center;
+  align-items: center;
   text-align: center;
   font-family: 'Segoe UI', sans-serif;
 }
 
 /* หัวข้อ */
 .card h2 {
-   font-family: 'Sacramento', cursive;
-  font-size: 36px;
+font-family: 'Sacramento', cursive;
+  font-size: 80px;
   margin-bottom: 30px;
   color: #630909;
-  font-weight: 500;
+  font-weight: 2000;
 }
 
 /* textarea เส้นใต้เดียว */
@@ -76,11 +79,11 @@ textarea {
   background: transparent;
   border: none;
   border-bottom: 2px solid #510d0d;
-  font-size: 18px;
+  font-size: 25px;
   resize: none;
   outline: none;
-    color: #510d0d;
-  padding: 20px 0 6px 0;
+  color: #510d0d;
+  padding-bottom: 20px
 
 }
 
@@ -119,8 +122,7 @@ input[type="file"] {
 /* ปุ่มส่ง */
 button {
   margin-top: 35px;
-background-color: #510d0d;
-  border: 2px solid #000;
+  background-color: #510d0d;
   border-radius: 30px;
   padding: 10px 0;
   width: 100%;
@@ -139,10 +141,31 @@ button:hover{
 /* สถานะ */
 .status {
  font-family: 'Sacramento', cursive;
-  font-size: 18px;
+  font-size: 25px;
   margin-top: 15px;
   font-size: 14px;
   color: #510d0d;
+}
+ 
+label{
+    display: none;
+}
+.file-name {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+}
+
+.preview-img {
+   margin: 12px auto 0;
+  margin-top: 12px;
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 12px;
+  display: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  object-fit: cover;
 }
 
 </style>
@@ -155,10 +178,20 @@ button:hover{
 
   <textarea id="text" placeholder="type..."></textarea>
 
-  <label for="imageInput" class="file-upload">
+  <!-- <label for="imageInput" class="file-upload">
     Choose image
   </label>
-  <input type="file" id="imageInput" accept="image/*">
+  <input type="file" id="imageInput" accept="image/*"> -->
+<label for="imageInput" class="file-upload">
+  Choose image
+</label>
+<input type="file" id="imageInput" accept="image/*">
+
+<!-- แสดงชื่อไฟล์ -->
+<div id="fileName" class="file-name"></div>
+
+<!-- preview รูป -->
+<img id="preview" class="preview-img" />
 
   <button id="sendBtn">Send</button>
   <div class="status" id="status"></div>
@@ -241,7 +274,7 @@ document.getElementById("sendBtn").onclick = async () => {
             createdAt: serverTimestamp()
         });
 
-        status.textContent = "successful!";
+        status.textContent = "succes!";
         document.getElementById("text").value = "";
         fileInput.value = "";
 
@@ -251,6 +284,27 @@ document.getElementById("sendBtn").onclick = async () => {
         status.textContent = "";
     }
 };
+
+const imageInput = document.getElementById("imageInput");
+const fileNameEl = document.getElementById("fileName");
+const preview = document.getElementById("preview");
+
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+
+  if (!file) return;
+
+  // แสดงชื่อไฟล์
+  fileNameEl.textContent = file.name;
+
+  // แสดง preview รูป
+  const reader = new FileReader();
+  reader.onload = e => {
+    preview.src = e.target.result;
+    preview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
 
 </script>
 
