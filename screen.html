@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>💖 Valentine Wall</title>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #ffd1dc, #ffffff48);
+    font-family: 'Mitr', sans-serif;    
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg {
+    position: fixed;
+    top: 0;
+    left: 0;        
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+}
+
+    .bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}   
+
+.wall {
+    background: rgba(241, 189, 203, 0.583);
+    width: 60%;
+    height: 60%;
+    border-radius: 50px;
+    box-shadow: 0 10px 80px rgb(245, 191, 216);
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    padding: 70px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.wall p {
+    font-size: 70px;
+    color: #fffefe;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+
+}
+
+.wall img{
+    width: 50%;
+    height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+    /* border: 2px solid salmon; */
+     /* box-shadow: 0 10px 30px rgba(255, 105, 180, 0.35); */
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.25),
+    inset 0 0 0 2px rgba(255,255,255,0.15);
+
+}
+
+
+
+.countdown {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #ff4d88;
+  background: rgba(255,255,255,0.6);
+  padding: 12px 24px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+</style>
+</head>
+
+<body>
+    <div class="bg"><video autoplay muted loop playsinline src="bg.mp4"></video></div>
+    <div class="wall" id="wall">
+        <!-- <div class="imgbox"></div>
+        <div class="textbox"><p></p></div> -->
+        <div id="countdown"></div>        
+    </div>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } 
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdnNofaKHq0DymEwB4tVhoOsjsmNiaW0g",
+  authDomain: "love-c3e16.firebaseapp.com",
+  projectId: "love-c3e16",
+  storageBucket: "love-c3e16.firebasestorage.app",
+  messagingSenderId: "1006520162203",
+  appId: "1:1006520162203:web:a6f0a69b4c8238bd76333e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const wall = document.getElementById("wall");
+const countdownEl = document.getElementById("countdown");
+
+let queue = [];
+let showing = false;
+let countdownInterval = null;
+
+const q = query(
+  collection(db, "messages"),
+  orderBy("createdAt")
+);
+
+onSnapshot(q, snapshot => {
+  snapshot.docChanges().forEach(change => {
+    if (change.type === "added") {
+      queue.push(change.doc.data());
+      playQueue();
+    }
+  });
+});
+
+function playQueue() {
+  if (showing || queue.length === 0) return;
+
+  showing = true;
+  const data = queue.shift();
+
+  wall.innerHTML = "";
+
+  if (data.imageUrl) {
+    const img = document.createElement("img");
+    img.src = data.imageUrl;
+    wall.appendChild(img);
+  }
+
+  if (data.text) {
+    const p = document.createElement("p");
+    p.textContent = data.text;
+    wall.appendChild(p);
+  }
+
+  startCountdown(2); // ⏳ 1 นาที
+
+  setTimeout(() => {
+    showing = false;
+    clearInterval(countdownInterval);
+    countdownEl.innerText = "";
+    playQueue();
+  }, 2000); // ⏱ 60 วินาที
+}
+
+function startCountdown(seconds) {
+  let timeLeft = seconds;
+  countdownEl.innerText = `⏳ ${timeLeft}`;
+
+  countdownInterval = setInterval(() => {
+    timeLeft--;
+    countdownEl.innerText = `⏳ ${timeLeft}`;
+    if (timeLeft <= 0) clearInterval(countdownInterval);
+  }, 1000);
+}
+</script>
+
+<!-- <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } 
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdnNofaKHq0DymEwB4tVhoOsjsmNiaW0g",
+  authDomain: "love-c3e16.firebaseapp.com",
+  projectId: "love-c3e16",
+  storageBucket: "love-c3e16.firebasestorage.app",
+  messagingSenderId: "1006520162203",
+  appId: "1:1006520162203:web:a6f0a69b4c8238bd76333e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const wall = document.getElementById("wall");
+let queue = [];
+let showing = false;
+
+const q = query(
+  collection(db, "messages"),
+  orderBy("createdAt")
+);
+
+onSnapshot(q, snapshot => {
+    snapshot.docChanges().forEach(change => {
+        if (change.type === "added") {
+            queue.push(change.doc.data());
+            playQueue();
+        }
+    });
+});
+
+function playQueue() {
+    if (showing || queue.length === 0) return;
+
+    showing = true;
+    const data = queue.shift();
+
+    wall.innerHTML = "";
+
+    if (data.imageUrl) {
+        const img = document.createElement("img");
+        img.src = data.imageUrl;
+        wall.appendChild(img);
+    }
+
+    if (data.text) {
+        const p = document.createElement("p");
+        p.textContent = data.text;
+        wall.appendChild(p);
+    }
+
+    setTimeout(() => {
+        showing = false;
+        playQueue();
+    }, 5000);
+} -->
+</body>
+</html>
