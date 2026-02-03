@@ -2,15 +2,10 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
 <title>💌 ส่งความรัก</title>
-<!-- <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet"> -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
@@ -19,110 +14,73 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* font-family: 'Segoe UI', sans-serif; */
+
     font-family: 'Great Vibes', cursive;
-    font-size: 25px;
+    font-size: 26px;
+
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-/* .card {
-    padding: 30px;
-    border-radius: 25px;
-    width: 300px;
-    text-align: center;
-}
-h2 { color: #ac1749; }
-textarea, button {
-    width: 100%;
-    margin-bottom: 10px;
-    background-color: transparent;
-    background: none;
 
-    border-bottom: 2px solid #282426;
-}
-button {
-    background: #bc545d;
-    color: rgb(239, 239, 239);
-    border: none;
-    cursor: pointer;
-}
- label {
-            display: block;
-            color: #c2185b;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-
-.status { margin-top: 10px; color: #9b0e3d; } */
 .card {
-  background: transparent; 
-  /* width: 500px;
-  height: 300px; */
-  justify-content: center;
-  align-items: center;
+  background: transparent;
   text-align: center;
-  font-family: 'Segoe UI', sans-serif;
 }
 
 /* หัวข้อ */
 .card h2 {
-font-family: 'Sacramento', cursive;
+  font-family: 'Great Vibes', cursive;
   font-size: 80px;
   margin-bottom: 30px;
   color: #630909;
-  font-weight: 2000;
+  font-weight: 400;
 }
 
-/* textarea เส้นใต้เดียว */
+/* textarea */
 textarea {
-  font-family: 'Sacramento', cursive;
+  font-family: 'Great Vibes', cursive;
   width: 100%;
-  height: 20px;
+  height: 28px;
   background: transparent;
   border: none;
   border-bottom: 2px solid #510d0d;
-  font-size: 25px;
+  font-size: 28px;
   resize: none;
   outline: none;
   color: #510d0d;
-  padding-bottom: 20px
-
+  padding-bottom: 10px;
 }
 
 textarea::placeholder {
-  color: #0b000081;
-  
-  /* padding-top: 14px; */
+  color: rgba(81,13,13,0.4);
 }
 
 textarea:focus {
   border-bottom-color: #510d0d;
 }
 
-/* ซ่อน input file ดิบ */
+/* ซ่อน input file */
 input[type="file"] {
   display: none;
 }
 
-/* ปุ่มเลือกไฟล์แบบเส้นใต้ */
+/* เลือกรูป */
 .file-upload {
-  font-family: 'Sacramento', cursive;
+  font-family: 'Great Vibes', cursive;
   display: block;
   margin-top: 25px;
   padding: 4px;
   border-bottom: 2px solid #510d0d;
   cursor: pointer;
-  color: #0b000081;
-  transition: all 0.3s ease;
-    text-align: left;
+  color: rgba(81,13,13,0.5);
+  text-align: left;
+  font-size: 26px;
 }
 
 .file-upload:hover {
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 /* ปุ่มส่ง */
@@ -130,41 +88,37 @@ button {
   margin-top: 35px;
   background-color: #510d0d;
   border-radius: 30px;
-  padding: 10px 0;
+  padding: 12px 0;
   width: 100%;
-  font-size: 18px;
-  font-family: 'Sacramento', cursive;
+  font-size: 26px;
+  font-family: 'Great Vibes', cursive;
   cursor: pointer;
   color: white;
   transition: all 0.3s ease;
 }
 
-button:hover{
-    background-color: #16c453;
-    border-color: transparent;
+button:hover {
+  background-color: #7a1a1a;
 }
 
 /* สถานะ */
 .status {
- font-family: 'Sacramento', cursive;
-  font-size: 25px;
+  font-family: 'Great Vibes', cursive;
+  font-size: 24px;
   margin-top: 15px;
-  font-size: 14px;
   color: #510d0d;
 }
- 
-label{
-    display: none;
-}
+
+/* ชื่อไฟล์ */
 .file-name {
   margin-top: 6px;
-  font-size: 14px;
-  color: #555;
+  font-size: 22px;
+  color: #510d0d;
   text-align: left;
 }
 
+/* preview รูป */
 .preview-img {
- 
   margin: 12px auto 0;
   max-width: 100%;
   max-height: 300px;
@@ -174,13 +128,11 @@ label{
   object-fit: cover;
 }
 
+
 </style>
 </head>
 
 <body>
-<h1 style="font-family:'Great Vibes', cursive; font-size:48px;">
-  Love is in the air 💕
-</h1>
 
 <div class="card">
   <h2>Your love message</h2>
