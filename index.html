@@ -2,60 +2,174 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
+
 <title>💌 ส่งความรัก</title>
-    <!-- <div class="bg"><video autoplay muted loop playsinline src="bg.mp4"></video></div> -->
+<!-- <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet"> -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 <style>
 body {
-    background: linear-gradient(135deg, #ffd1dc, #fff);
-    font-family: 'Segoe UI', sans-serif;
+    background-image: url(1.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* font-family: 'Segoe UI', sans-serif; */
+      font-family: 'Great Vibes', cursive;
+
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.card {
-    background: white;
+/* .card {
     padding: 30px;
     border-radius: 25px;
-    width: 360px;
-    box-shadow: 0 20px 50px rgba(0,0,0,.2);
+    width: 300px;
     text-align: center;
 }
-h2 { color: #ff4d88; }
-textarea, input, button {
+h2 { color: #ac1749; }
+textarea, button {
     width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    background-color: transparent;
+    background: none;
+
+    border-bottom: 2px solid #282426;
 }
 button {
-    background: #ff4d88;
-    color: white;
+    background: #bc545d;
+    color: rgb(239, 239, 239);
     border: none;
     cursor: pointer;
 }
-.status { margin-top: 10px; color: #ff4d88; }
+ label {
+            display: block;
+            color: #c2185b;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
 
-.bg video{
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-                overflow: hidden;
+
+.status { margin-top: 10px; color: #9b0e3d; } */
+.card {
+  background: transparent;     /* ไม่มีสี */
+  width: 320px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* หัวข้อ */
+.card h2 {
+   font-family: 'Sacramento', cursive;
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #630909;
+  font-weight: 500;
+}
+
+/* textarea เส้นใต้เดียว */
+textarea {
+  font-family: 'Sacramento', cursive;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #510d0d;
+  font-size: 18px;
+  resize: none;
+  outline: none;
+    color: #510d0d;
+  padding: 20px 0 6px 0;
 
 }
+
+textarea::placeholder {
+  color: #0b000081;
+  
+  /* padding-top: 14px; */
+}
+
+textarea:focus {
+  border-bottom-color: #510d0d;
+}
+
+/* ซ่อน input file ดิบ */
+input[type="file"] {
+  display: none;
+}
+
+/* ปุ่มเลือกไฟล์แบบเส้นใต้ */
+.file-upload {
+  font-family: 'Sacramento', cursive;
+  display: block;
+  margin-top: 25px;
+  padding: 4px;
+  border-bottom: 2px solid #510d0d;
+  cursor: pointer;
+  color: #0b000081;
+  transition: all 0.3s ease;
+    text-align: left;
+}
+
+.file-upload:hover {
+  opacity: 0.6;
+}
+
+/* ปุ่มส่ง */
+button {
+  margin-top: 35px;
+background-color: #510d0d;
+  border: 2px solid #000;
+  border-radius: 30px;
+  padding: 10px 0;
+  width: 100%;
+  font-size: 18px;
+  font-family: 'Sacramento', cursive;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover{
+    background-color: #510d0d70;
+    border-color: transparent;
+}
+
+/* สถานะ */
+.status {
+ font-family: 'Sacramento', cursive;
+  font-size: 18px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #510d0d;
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="card">
-    <h2>💖 Valentine</h2>
-    <textarea id="text" placeholder="พิมพ์ข้อความ (ไม่ใส่ก็ได้)"></textarea>
-    <input type="file" id="image" accept="image/*">
-    <button id="sendBtn">ส่ง 💕</button>
-    <div class="status" id="status"></div>
+  <h2>Your love message</h2>
+
+  <textarea id="text" placeholder="type..."></textarea>
+
+  <label for="imageInput" class="file-upload">
+    Choose image
+  </label>
+  <input type="file" id="imageInput" accept="image/*">
+
+  <button id="sendBtn">Send</button>
+  <div class="status" id="status"></div>
 </div>
+
+
+
+
+
+
+
 
 <script type="module">
 /* 🔥 Firebase (v12 – module) */
@@ -104,19 +218,22 @@ async function uploadImage(file) {
 
 document.getElementById("sendBtn").onclick = async () => {
     const text = document.getElementById("text").value.trim();
-    const file = document.getElementById("image").files[0];
+    const fileInput = document.getElementById("imageInput");
+    const file = fileInput.files[0];
     const status = document.getElementById("status");
 
     if (!text && !file) {
-        alert("กรุณาพิมพ์ข้อความหรือเลือกรูปอย่างใดอย่างหนึ่ง 💕");
+        alert("กรุณาพิมพ์ข้อความหรือเลือกรูปอย่างใดอย่างหนึ่ง ");
         return;
     }
 
-    status.textContent = "กำลังส่ง...";
+    status.textContent = "waiting...";
     let imageUrl = "";
 
     try {
-        if (file) imageUrl = await uploadImage(file);
+        if (file) {
+            imageUrl = await uploadImage(file);
+        }
 
         await addDoc(collection(db, "messages"), {
             text,
@@ -124,16 +241,17 @@ document.getElementById("sendBtn").onclick = async () => {
             createdAt: serverTimestamp()
         });
 
-        status.textContent = "ส่งสำเร็จแล้ว 💖";
+        status.textContent = "successful!";
         document.getElementById("text").value = "";
-        document.getElementById("image").value = "";
+        fileInput.value = "";
 
     } catch (err) {
         console.error(err);
-        alert("ส่งไม่สำเร็จ 😢");
+        alert("ส่งไม่สำเร็จ");
         status.textContent = "";
     }
 };
+
 </script>
 
 </body>
