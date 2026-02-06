@@ -6,7 +6,8 @@
 <title>💌 ส่งความรัก</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<!-- <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet"> -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -15,6 +16,8 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     /* font-family: 'Segoe UI', sans-serif; */
+      /* font-family: 'Dancing Script', cursive; */
+
     font-family: 'Great Vibes', cursive;
     font-size: 25px;
     height: 100vh;
@@ -30,12 +33,19 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-family: 'Segoe UI', sans-serif;
+  /* font-family: 'Segoe UI', sans-serif; */
+  /* font-family: 'Dancing Script', cursive; */
+    font-family: 'Great Vibes', cursive;
+
+
 }
 
 /* หัวข้อ */
 .card h2 {
-font-family: 'Sacramento', cursive;
+    font-family: 'Great Vibes', cursive;
+
+  /* font-family: 'Dancing Script', cursive; */
+/* font-family: 'Sacramento', cursive; */
   font-size: 80px;
   margin-bottom: 30px;
   color: #630909;
@@ -44,7 +54,7 @@ font-family: 'Sacramento', cursive;
 
 /* textarea เส้นใต้เดียว */
 textarea {
-  font-family: 'Sacramento', cursive;
+  /* font-family: 'Sacramento', cursive; */
   width: 100%;
   height: 20px;
   background: transparent;
@@ -105,18 +115,20 @@ button {
 }
 
 button:hover{
-    background-color: #52ac72;
-    border-color: transparent;
+    background-color: #5abb7c;
+    border-color: #5abb7c;;
 }
 
 /* สถานะ */
-.status {
+/* .status {
  font-family: 'Sacramento', cursive;
-  font-size: 25px;
+  font-size: 30px;
   margin-top: 15px;
   font-size: 14px;
   color: #510d0d;
-}
+  transition: opacity 0.3s ease;
+  background-color: aquamarine;
+} */
  
 label{
     display: none;
@@ -172,10 +184,102 @@ label{
 
 
 
-
-
-
 <script type="module">
+/* 🔥 Firebase (v12 – module) */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+/* 🔑 Firebase config */
+const firebaseConfig = {
+  apiKey: "AIzaSyAdnNofaKHq0DymEwB4tVhoOsjsmNiaW0g",
+  authDomain: "love-c3e16.firebaseapp.com",
+  projectId: "love-c3e16",
+  storageBucket: "love-c3e16.firebasestorage.app",
+  messagingSenderId: "1006520162203",
+  appId: "1:1006520162203:web:a6f0a69b4c8238bd76333e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* 🖼 imgbb */
+const IMGBB_API_KEY = "d7ff3b59225fef396757e8e7fb8b1434";
+
+async function uploadImage(file) {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await fetch(
+    `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+    { method: "POST", body: formData }
+  );
+
+  const data = await res.json();
+  if (!data.success) throw new Error("Upload failed");
+  return data.data.url;
+}
+
+/* ✅ ส่งข้อมูล */
+document.getElementById("sendBtn").onclick = async () => {
+  const text = document.getElementById("text").value.trim();
+  const fileInput = document.getElementById("imageInput");
+  const file = fileInput.files[0];
+  const status = document.getElementById("status");
+
+  if (!text && !file) {
+    alert("กรุณาพิมพ์ข้อความหรือเลือกรูปอย่างใดอย่างหนึ่ง");
+    return;
+  }
+
+  // status.textContent = "sending...";
+
+  try {
+    let imageUrl = "";
+    if (file) imageUrl = await uploadImage(file);
+
+    await addDoc(collection(db, "messages"), {
+      text,
+      imageUrl,
+      createdAt: serverTimestamp()
+    });
+
+    // ✅ แจ้งเตือนสำเร็จ
+    alert("💖 ส่งข้อความสำเร็จแล้ว");
+
+    // ✅ รีเฟรชหน้าใหม่
+    location.reload();
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ ส่งไม่สำเร็จ");
+    status.textContent = "";
+  }
+};
+
+/* ✅ preview รูป */
+const imageInput = document.getElementById("imageInput");
+const fileNameEl = document.getElementById("fileName");
+const preview = document.getElementById("preview");
+
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  fileNameEl.textContent = file.name;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    preview.src = e.target.result;
+    preview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+
+
+
+<!-- <script type="module">
 /* 🔥 Firebase (v12 – module) */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } 
@@ -277,7 +381,7 @@ imageInput.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
-</script>
+</script> -->
 
 </body>
 </html>
